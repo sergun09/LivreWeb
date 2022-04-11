@@ -9,9 +9,7 @@ namespace LivreWeb.Models
         [Required]
         public string Name { get; set; } = string.Empty;
         public int NombreCommandes { get; set; }
-
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-
 
     }
 }
