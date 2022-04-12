@@ -1,4 +1,6 @@
 using LivreWeb.DataAccess;
+using LivreWeb.DataAccess.Repository;
+using LivreWeb.DataAccess.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<LivreContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+
+builder.Services.AddScoped<ICategorieRepository,CategorieRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

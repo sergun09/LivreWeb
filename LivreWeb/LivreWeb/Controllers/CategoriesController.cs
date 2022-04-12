@@ -3,22 +3,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LivreWeb.Models;
 using LivreWeb.DataAccess;
+using LivreWeb.DataAccess.Repository.Interfaces;
 
 namespace LivreWeb.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly LivreContext _context;
+        private readonly ICategorieRepository _repo;
 
-        public CategoriesController(LivreContext context)
+        public CategoriesController(ICategorieRepository repo)
         {
-            _context = context;
+            this._repo = repo;
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            return View(await this._repo.GetAll());
         }
 
         // GET: Categories/Details/5
@@ -29,8 +30,7 @@ namespace LivreWeb.Controllers
                 return NotFound();
             }
 
-            var categorie = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var categorie = await _repo.GetFirstOrDefault(cat => cat.Id == id);
             if (categorie == null)
             {
                 return NotFound();
@@ -54,8 +54,8 @@ namespace LivreWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(categorie);
-                await _context.SaveChangesAsync();
+                await _repo.Add(categorie);
+                await _repo.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(categorie);
@@ -69,7 +69,7 @@ namespace LivreWeb.Controllers
                 return NotFound();
             }
 
-            var categorie = await _context.Categories.FindAsync(id);
+            var categorie = await _repo.GetFirstOrDefault(cat => cat.Id == id);
             if (categorie == null)
             {
                 return NotFound();
@@ -82,7 +82,7 @@ namespace LivreWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,NombreCommandes,CreatedAt")] Categorie categorie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,NombreCommandes")] Categorie categorie)
         {
             if (id != categorie.Id)
             {
@@ -93,19 +93,12 @@ namespace LivreWeb.Controllers
             {
                 try
                 {
-                    _context.Update(categorie);
-                    await _context.SaveChangesAsync();
+                    _repo.Update(categorie);
+                    await _repo.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategorieExists(categorie.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    return NotFound();
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -120,8 +113,7 @@ namespace LivreWeb.Controllers
                 return NotFound();
             }
 
-            var categorie = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var categorie = await _repo.GetFirstOrDefault(cat => cat.Id == id);
             if (categorie == null)
             {
                 return NotFound();
@@ -135,15 +127,10 @@ namespace LivreWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var categorie = await _context.Categories.FindAsync(id);
-            _context.Categories.Remove(categorie);
-            await _context.SaveChangesAsync();
+            var categorie = await _repo.GetFirstOrDefault(cat => cat.Id == id);
+            _repo.DeleteOne(categorie);
+            await _repo.SaveChanges();
             return RedirectToAction(nameof(Index));
-        }
-
-        private bool CategorieExists(int id)
-        {
-            return _context.Categories.Any(e => e.Id == id);
         }
     }
 }
