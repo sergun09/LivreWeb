@@ -1,7 +1,7 @@
 ﻿using LivreWeb.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace LivreWeb.Data
+namespace LivreWeb.DataAccess
 {
     public class LivreContext : DbContext
     {
