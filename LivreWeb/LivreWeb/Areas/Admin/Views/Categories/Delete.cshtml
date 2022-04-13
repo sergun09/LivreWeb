@@ -1,20 +1,21 @@
 ﻿@model LivreWeb.Models.Categorie
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Delete";
 }
 
-<h1>Details</h1>
+<h1>Delete</h1>
 
+<h3>Voulez-vous vraiment supprimer cette catégorie ?</h3>
 <div>
     <h4>Categorie</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayNameFor(model => model.Nom)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.Nom)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.NombreCommandes)
@@ -29,8 +30,10 @@
             @Html.DisplayFor(model => model.CreatedAt)
         </dd>
     </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Mettre à jour</a> |
-    <a asp-action="Index" class="btn btn-info">Retour aux catégories</a>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Supprimer" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-info">Retour aux catégories</a>
+    </form>
 </div>

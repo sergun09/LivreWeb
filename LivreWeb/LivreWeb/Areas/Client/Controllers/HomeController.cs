@@ -4,6 +4,7 @@ using System.Diagnostics;
 
 namespace LivreWeb.Controllers
 {
+    [Area("Client")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

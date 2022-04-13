@@ -7,19 +7,20 @@ using LivreWeb.DataAccess.Repository.Interfaces;
 
 namespace LivreWeb.Controllers
 {
+    [Area("Admin")]
     public class CategoriesController : Controller
     {
-        private readonly ICategorieRepository _repo;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public CategoriesController(ICategorieRepository repo)
+        public CategoriesController(IUnitOfWork unitOfWork)
         {
-            this._repo = repo;
+            this._unitOfWork = unitOfWork;
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await this._repo.GetAll());
+            return View(await this._unitOfWork.CategorieRepository.GetAll());
         }
 
         // GET: Categories/Details/5
@@ -30,7 +31,7 @@ namespace LivreWeb.Controllers
                 return NotFound();
             }
 
-            var categorie = await _repo.GetFirstOrDefault(cat => cat.Id == id);
+            var categorie = await this._unitOfWork.CategorieRepository.GetFirstOrDefault(cat => cat.Id == id);
             if (categorie == null)
             {
                 return NotFound();
@@ -50,12 +51,12 @@ namespace LivreWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,NombreCommandes")] Categorie categorie)
+        public async Task<IActionResult> Create([Bind("Id,Nom,NombreCommandes")] Categorie categorie)
         {
             if (ModelState.IsValid)
             {
-                await _repo.Add(categorie);
-                await _repo.SaveChanges();
+                await this._unitOfWork.CategorieRepository.Add(categorie);
+                await this._unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
             return View(categorie);
@@ -69,7 +70,7 @@ namespace LivreWeb.Controllers
                 return NotFound();
             }
 
-            var categorie = await _repo.GetFirstOrDefault(cat => cat.Id == id);
+            var categorie = await this._unitOfWork.CategorieRepository.GetFirstOrDefault(cat => cat.Id == id);
             if (categorie == null)
             {
                 return NotFound();
@@ -82,7 +83,7 @@ namespace LivreWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,NombreCommandes")] Categorie categorie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nom,NombreCommandes")] Categorie categorie)
         {
             if (id != categorie.Id)
             {
@@ -93,8 +94,8 @@ namespace LivreWeb.Controllers
             {
                 try
                 {
-                    _repo.Update(categorie);
-                    await _repo.SaveChanges();
+                    this._unitOfWork.CategorieRepository.Update(categorie);
+                    await _unitOfWork.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -113,7 +114,7 @@ namespace LivreWeb.Controllers
                 return NotFound();
             }
 
-            var categorie = await _repo.GetFirstOrDefault(cat => cat.Id == id);
+            var categorie = await this._unitOfWork.CategorieRepository.GetFirstOrDefault(cat => cat.Id == id);
             if (categorie == null)
             {
                 return NotFound();
@@ -127,9 +128,9 @@ namespace LivreWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var categorie = await _repo.GetFirstOrDefault(cat => cat.Id == id);
-            _repo.DeleteOne(categorie);
-            await _repo.SaveChanges();
+            var categorie = await this._unitOfWork.CategorieRepository.GetFirstOrDefault(cat => cat.Id == id);
+            this._unitOfWork.CategorieRepository.DeleteOne(categorie);
+            await _unitOfWork.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
     }
