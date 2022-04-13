@@ -1,36 +1,32 @@
-﻿@model LivreWeb.Models.Categorie
+﻿@model LivreWeb.Models.CouvertureType
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Ajouter une Catégorie</h1>
+<h1>Modfication d'une catégorie</h1>
 
 <h4>Categorie</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Nom" class="control-label"></label>
                 <input asp-for="Nom" class="form-control" />
                 <span asp-validation-for="Nom" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="NombreCommandes" class="control-label"></label>
-                <input asp-for="NombreCommandes" class="form-control" />
-                <span asp-validation-for="NombreCommandes" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Ajouter" class="btn btn-primary mt-2 mb-2" />
+                <input type="submit" value="Mettre à jour" class="btn btn-primary mt-2 mb-2" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index" class="btn btn-info">Retour aux catégories</a>
+    <a asp-action="Index" class="btn btn-info">Retour aux couvertures</a>
 </div>
 
 @section Scripts {
