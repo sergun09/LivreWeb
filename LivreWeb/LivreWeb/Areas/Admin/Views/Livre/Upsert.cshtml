@@ -1,0 +1,80 @@
+﻿@model Livre
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1 class="mt-4">@(Model.Id == 0 ? "Ajouter" : "Modifier") un livre</h1>
+
+<hr />
+<div class="row">
+    <div class=" row col-12">
+        <form asp-action="Upsert" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Titre" class="control-label"></label>
+                <input asp-for="Titre" class="form-control" />
+                <span asp-validation-for="Titre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Auteur" class="control-label"></label>
+                <input asp-for="Auteur" class="form-control" />
+                <span asp-validation-for="Auteur" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ISBN" class="control-label"></label>
+                <input asp-for="ISBN" class="form-control" />
+                <span asp-validation-for="ISBN" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Prix" class="control-label"></label>
+                <input asp-for="Prix" class="form-control" />
+                <span asp-validation-for="Prix" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea  asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CategorieId" class="control-label"></label>
+                <select asp-for="CategorieId" asp-items="ViewBag.categoriesSelect" class="form-select">
+                    <option disabled selected>-- Choisir une catégorie</option>
+                </select>
+                <span asp-validation-for="CategorieId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CouvertureTypeId" class="control-label"></label>
+                <select asp-for="CouvertureTypeId" asp-items="@ViewData["couverturesSelect"] as IEnumerable<SelectListItem>" class="form-select">
+                    <option disabled selected>-- Choisir un type de couverture</option>
+                </select>
+                <span asp-validation-for="CategorieId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <input type="file" name="file" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+             
+            <div class="col-12">
+                <div class="form-group">
+                    <input type="submit" value="@(Model.Id == 0 ? "Ajouter" : "Modifier")" class="btn btn-primary mt-2 mb-2" />
+                </div>
+                <div>
+                    <a asp-action="Index" class="btn btn-info">Retour aux couvertures</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

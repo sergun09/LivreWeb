@@ -11,15 +11,16 @@ namespace LivreWeb.DataAccess.Repository
     {
         private LivreContext _context;
 
-        public CategorieRepository CategorieRepository { get; set; }
-        public CouvertureTypeRepository CouvertureTypeRepository { get; set; }
-
+        public ICategorieRepository CategorieRepository { get; set; }
+        public ICouvertureTypeRepository CouvertureTypeRepository { get; set; }
+        public ILivreRepository LivreRepository { get; set; }
 
         public UnitOfWork(LivreContext context)
         {
             _context = context;
             this.CategorieRepository = new CategorieRepository(this._context);
             this.CouvertureTypeRepository = new CouvertureTypeRepository(this._context);
+            this.LivreRepository = new LivreRepository(this._context);
         }
 
         public async Task SaveChanges()

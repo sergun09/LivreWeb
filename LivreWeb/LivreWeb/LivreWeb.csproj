@@ -25,4 +25,8 @@
     <ProjectReference Include="..\LivreWeb.DataAccess\LivreWeb.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\livres\" />
+  </ItemGroup>
+
 </Project>

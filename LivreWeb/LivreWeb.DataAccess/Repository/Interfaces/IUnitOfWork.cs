@@ -8,8 +8,9 @@ namespace LivreWeb.DataAccess.Repository.Interfaces
 {
     public interface IUnitOfWork
     {
-        CategorieRepository CategorieRepository { get; }
-        CouvertureTypeRepository CouvertureTypeRepository { get; }
+        ICategorieRepository CategorieRepository { get; }
+        ICouvertureTypeRepository CouvertureTypeRepository { get; }
+        ILivreRepository LivreRepository { get; }
 
         Task SaveChanges();
     }
