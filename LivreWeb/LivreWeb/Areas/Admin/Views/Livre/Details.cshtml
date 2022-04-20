@@ -1,20 +1,28 @@
-﻿@model Livre
+﻿@model Panier
 
-<h1>Details du livre</h1>
+<h1 class="pt-4">Details du livre</h1>
 
-<div>
-    <h4>Livre</h4>
-    <hr />
-    <ul>
-        <li>@Model.Titre</li>
-        <li>@Model.Auteur</li>
-        <li>@Model.Description</li>
-        <li>@Model.Prix</li>
-        <li>@Model.Categorie.Nom</li>
-        <li>@Model.CouvertureType.Nom</li>
-    </ul>
+<div class="card">
+  <h5 class="card-header">@Model.Livre.Categorie.Nom | @Model.Livre.CouvertureType.Nom | @Model.Livre.ISBN</h5>
+  <div class="card-body">
+    <h5 class="card-title">@Model.Livre.Titre écrit par <strong>@Model.Livre.Auteur</strong></h5>
+    <div class="clearfix">
+      <img src="@Model.Livre.ImageUrl" class="col-md-6 float-md-end mb-3 ms-md-3">
+      <p>@Model.Livre.Description</p>
+    </div>
+  </div>
+</div>
+
+
+<div class="row pt-4">
+    <div class="col-12 form-control">
+        <div class="row"></div>
+        <label asp-for="Quantite" class="control-label col"></label>
+        <input asp-for="Quantite" class="col-8"/>
+        <input type="submit" class="col btn btn-primary" value="Ajouter au panier"/>
+        <a asp-action="Index" class="btn btn-info">Retour aux Livres</a>
+    </div>
 </div>
 <div>
-    <a asp-action="Upsert" asp-route-id="@Model.Id" class="btn btn-warning">Mettre à jour</a> |
-    <a asp-action="Index" class="btn btn-info">Retour aux Livres</a>
+    <a asp-action="Upsert" asp-route-id="@Model.Livre.Id" class="btn btn-warning">Mettre à jour</a> |
 </div>

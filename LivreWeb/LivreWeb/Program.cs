@@ -2,8 +2,12 @@ using LivreWeb.DataAccess;
 using LivreWeb.DataAccess.Repository;
 using LivreWeb.DataAccess.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDefaultIdentity<IdentityUser>()
+    .AddEntityFrameworkStores<LivreContext>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -29,6 +33,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();
 
 app.UseAuthorization();
 

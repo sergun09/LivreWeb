@@ -35,14 +35,19 @@ namespace LivreWeb.Controllers
                 return NotFound();
             }
 
-            var livre = await this._unitOfWork.LivreRepository.GetFirstOrDefault(l => l.Id == id, 
-                includes: "Categorie,CouvertureType");
-            if (livre == null)
+            Panier panier = new()
+            {
+                Livre = await this._unitOfWork.LivreRepository.GetFirstOrDefault(l => l.Id == id,
+                includes: "Categorie,CouvertureType"),
+                Quantite = 1
+            };
+
+            if (panier == null)
             {
                 return NotFound();
             }
 
-            return View(livre);
+            return View(panier);
         }
 
         // GET: Categories/Edit/5
