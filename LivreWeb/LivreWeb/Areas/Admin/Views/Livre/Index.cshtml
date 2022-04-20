@@ -1,4 +1,6 @@
-﻿@{
+﻿@model IEnumerable<Livre>
+
+@{
     ViewData["Title"] = "Index";
 }
 
@@ -19,11 +21,29 @@
         <tr>
             <th>Titre</th>
             <th>ISBN</th>
-            <th>Autheur</th>
+            <th>Auteur</th>
             <th>Prix</th>
-            <th>Titre</th>
+            <th>Catégorie</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
+        @foreach(Livre livre in Model)
+        {
+            <tr>
+                <td>@livre.Titre</td>
+                <td>@livre.ISBN</td>
+                <td>@livre.Auteur</td>
+                <td>@livre.Prix</td>
+                <td>@livre.Categorie.Nom</td>
+                <td>
+                <a asp-action="Upsert" asp-route-id="@livre.Id" class="btn btn-warning">Modifier</a> |
+                <a asp-action="Details" asp-route-id="@livre.Id" class="btn btn-primary">Voir</a>
+                <form asp-action="Delete" asp-route-id="@livre.Id" onclick="return confirm('Voulez-vous vraiment supprimer le livre @livre.Titre')">
+                    <button type="submit" class="btn btn-danger" value="Supprimer" />
+                </form>|
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

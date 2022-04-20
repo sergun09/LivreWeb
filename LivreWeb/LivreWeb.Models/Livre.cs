@@ -30,14 +30,17 @@ namespace LivreWeb.Models
        
         [ValidateNever]
         public string ImageUrl { get; set; } = string.Empty;
-        
+
         [ValidateNever]
-        public Categorie Categorie { get; set; }
+        public Categorie? Categorie { get; set; }
+
+        [Display(Name = "Catégorie")]
         public int CategorieId { get; set; }
 
         [ValidateNever]
-        public CouvertureType CouvertureType { get; set; }
+        public CouvertureType? CouvertureType { get; set; }
         
+        [Display(Name = "Type de Couverture")]
         public int CouvertureTypeId { get; set; }
 
 

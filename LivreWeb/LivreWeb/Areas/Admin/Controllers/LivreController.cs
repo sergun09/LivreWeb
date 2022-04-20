@@ -14,7 +14,6 @@ namespace LivreWeb.Controllers
         private readonly IUnitOfWork _unitOfWork;
 
         private IWebHostEnvironment _webHost;
-
         public LivreController(IUnitOfWork unitOfWork, IWebHostEnvironment webHost)
         {
             this._unitOfWork = unitOfWork;
@@ -24,7 +23,8 @@ namespace LivreWeb.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await this._unitOfWork.LivreRepository.GetAll());
+            var livres = await this._unitOfWork.LivreRepository.GetAll(includes : "Categorie,CouvertureType");
+            return View(livres);
         }
 
         // GET: Categories/Details/5
@@ -35,19 +35,21 @@ namespace LivreWeb.Controllers
                 return NotFound();
             }
 
-            var categorie = await this._unitOfWork.CouvertureTypeRepository.GetFirstOrDefault(cat => cat.Id == id);
-            if (categorie == null)
+            var livre = await this._unitOfWork.LivreRepository.GetFirstOrDefault(l => l.Id == id, 
+                includes: "Categorie,CouvertureType");
+            if (livre == null)
             {
                 return NotFound();
             }
 
-            return View(categorie);
+            return View(livre);
         }
 
         // GET: Categories/Edit/5
         public async Task<IActionResult> Upsert(int? id)
         {
             Livre livre = new();
+
             IEnumerable<SelectListItem> categoriesSelect = this._unitOfWork.CategorieRepository.GetAll().Result.Select(cat => new SelectListItem 
             {
                 Text = cat.Nom,
@@ -60,10 +62,11 @@ namespace LivreWeb.Controllers
                 Value = couv.Id.ToString()
             });
 
+            ViewBag.categoriesSelect = categoriesSelect;
+            ViewData["couverturesSelect"] = couverturesSelect;
+
             if (id == null || id == 0)
             {
-                ViewBag.categoriesSelect = categoriesSelect;
-                ViewData["couverturesSelect"] = couverturesSelect;
                 return View(livre);
             }
             else
@@ -71,7 +74,6 @@ namespace LivreWeb.Controllers
                 livre = await this._unitOfWork.LivreRepository.GetFirstOrDefault(l => l.Id == id);
                 return View(livre);
             }
-            return View();
         }
 
         // POST: Categories/Edit/5
@@ -86,10 +88,21 @@ namespace LivreWeb.Controllers
             {
                 try
                 {
+                    // Récupération de la www
                     string wwwPath = this._webHost.WebRootPath;
+                    // Création d'un ID unique pour chaque image
                     string fileName = Guid.NewGuid().ToString();
+                    // Fusion de la route
                     string path = Path.Combine(wwwPath, @"images\livres");
+                    // Récupération de l'extension de l'image : .png / .jpg
                     string extension = Path.GetExtension(file.FileName);
+
+                    if(livre.ImageUrl != null) 
+                    {
+                        string oldImagePath = Path.Combine(wwwPath, "images/livres");
+                        if (System.IO.File.Exists(oldImagePath))
+                            System.IO.File.Delete(oldImagePath);
+                    }
 
                     using (var fileStreams = new FileStream(Path.Combine(path, fileName + extension), FileMode.Create)) 
                     {
@@ -97,7 +110,14 @@ namespace LivreWeb.Controllers
                     }
                     livre.ImageUrl = @"images\livres\" + fileName + extension;
 
-                    await this._unitOfWork.LivreRepository.Add(livre);
+                    if(livre.Id == 0) 
+                    {
+                        await this._unitOfWork.LivreRepository.Add(livre);
+                    }
+                    else 
+                    {
+                        this._unitOfWork.LivreRepository.Update(livre);
+                    }
                     await _unitOfWork.SaveChanges();
                     return RedirectToAction(nameof(Index)); 
                 }
@@ -118,13 +138,13 @@ namespace LivreWeb.Controllers
                 return NotFound();
             }
 
-            var couvertureType = await this._unitOfWork.CouvertureTypeRepository.GetFirstOrDefault(cat => cat.Id == id);
-            if (couvertureType == null)
+            var livre = await this._unitOfWork.LivreRepository.GetFirstOrDefault(l => l.Id == id);
+            if (livre == null)
             {
                 return NotFound();
             }
 
-            return View(couvertureType);
+            return View(livre);
         }
 
         // POST: Categories/Delete/5
@@ -132,8 +152,14 @@ namespace LivreWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var couvertureType = await this._unitOfWork.CouvertureTypeRepository.GetFirstOrDefault(cat => cat.Id == id);
-            this._unitOfWork.CouvertureTypeRepository.DeleteOne(couvertureType);
+            var livre = await this._unitOfWork.LivreRepository.GetFirstOrDefault(l => l.Id == id);
+            if (livre.ImageUrl != null)
+            {
+                string oldImagePath = Path.Combine(_webHost.WebRootPath, "images/livres");
+                if (System.IO.File.Exists(oldImagePath))
+                    System.IO.File.Delete(oldImagePath);
+            }
+            this._unitOfWork.LivreRepository.DeleteOne(livre);
             await _unitOfWork.SaveChanges();
             return RedirectToAction(nameof(Index));
         }

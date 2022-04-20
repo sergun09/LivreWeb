@@ -1,4 +1,5 @@
 ﻿using LivreWeb.DataAccess.Repository.Interfaces;
+using LivreWeb.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -35,14 +36,30 @@ namespace LivreWeb.DataAccess.Repository
             this._dbSet.Remove(entity);
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAll(string? includes)
         {
-            return await this._dbSet.ToListAsync();
+            IQueryable<T> query = this._dbSet;
+            if (includes != null) 
+            {
+                foreach (string navigationProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) 
+                {
+                    query = query.Include(navigationProperty);
+                }
+            }
+            return await query.ToListAsync();
         }
-
-        public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>> predicate)
+        public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>> predicate, string? includes)
         {
-            return await this._dbSet.FirstOrDefaultAsync(predicate);
+            IQueryable<T> query = this._dbSet;
+
+            if (includes != null) 
+            {
+                foreach (string navigationProperty in includes.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries)) 
+                {
+                    query = query.Include(navigationProperty);
+                }
+            }
+            return await query.FirstOrDefaultAsync(predicate);
         }
     }
 }

@@ -1,0 +1,20 @@
+﻿@model Livre
+
+<h1>Details du livre</h1>
+
+<div>
+    <h4>Livre</h4>
+    <hr />
+    <ul>
+        <li>@Model.Titre</li>
+        <li>@Model.Auteur</li>
+        <li>@Model.Description</li>
+        <li>@Model.Prix</li>
+        <li>@Model.Categorie.Nom</li>
+        <li>@Model.CouvertureType.Nom</li>
+    </ul>
+</div>
+<div>
+    <a asp-action="Upsert" asp-route-id="@Model.Id" class="btn btn-warning">Mettre à jour</a> |
+    <a asp-action="Index" class="btn btn-info">Retour aux Livres</a>
+</div>

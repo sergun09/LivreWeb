@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 
 namespace LivreWeb.Models
 {
@@ -10,6 +11,9 @@ namespace LivreWeb.Models
         public string Nom { get; set; } = string.Empty;
         public int NombreCommandes { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+        [ValidateNever]
+        public List<Livre> Livres { get; set; }
 
     }
 }

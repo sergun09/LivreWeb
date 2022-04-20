@@ -10,8 +10,8 @@ namespace LivreWeb.DataAccess.Repository.Interfaces
     public interface IGenericRepository<T> where T : class 
     {
         // Implémentation des méthodes communes à toutes les repositories
-        Task<IEnumerable<T>> GetAll();
-        Task<T> GetFirstOrDefault(Expression<Func<T, bool>> predicate);
+        Task<IEnumerable<T>> GetAll(string? includes = null);
+        Task<T> GetFirstOrDefault(Expression<Func<T, bool>> predicate, string? includes = null);
         Task Add(T entity);
         void DeleteOne(T entity);
         void DeleteFromTo(IEnumerable<T> entities);

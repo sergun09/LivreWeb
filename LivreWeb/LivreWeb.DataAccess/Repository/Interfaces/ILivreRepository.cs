@@ -10,6 +10,6 @@ namespace LivreWeb.DataAccess.Repository.Interfaces
     public interface ILivreRepository : IGenericRepository<Livre>
     {
         // Signatures des méthodes propres à chaque modèle
-       void Update(Livre livre);
+        void Update(Livre livre);
     }
 }

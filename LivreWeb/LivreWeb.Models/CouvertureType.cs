@@ -14,5 +14,7 @@ namespace LivreWeb.Models
         [Required]
         [MaxLength(50)]
         public string Nom { get; set; } = string.Empty;
+
+        public List<Livre> Livres { get; set; }
     }
 }

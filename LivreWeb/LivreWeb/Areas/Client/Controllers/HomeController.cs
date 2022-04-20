@@ -1,4 +1,5 @@
-﻿using LivreWeb.Models;
+﻿using LivreWeb.DataAccess.Repository.Interfaces;
+using LivreWeb.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -8,15 +9,18 @@ namespace LivreWeb.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork )
         {
             _logger = logger;
+            this.unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            IEnumerable<Livre> livres = await this.unitOfWork.LivreRepository.GetAll(includes : "Categorie,CouvertureType");
+            return View(livres);
         }
 
         public IActionResult Privacy()
