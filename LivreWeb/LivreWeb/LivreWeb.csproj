@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LivreWeb.DataAccess\LivreWeb.DataAccess.csproj" />
+    <ProjectReference Include="..\LivreWeb.Utilities\LivreWeb.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -39,7 +39,7 @@ namespace LivreWeb.Controllers
             {
                 Livre = await this._unitOfWork.LivreRepository.GetFirstOrDefault(l => l.Id == id,
                 includes: "Categorie,CouvertureType"),
-                Quantite = 1
+                Quantite = "1"
             };
 
             if (panier == null)

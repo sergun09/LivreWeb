@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LivreWeb.DataAccess.Repository.Interfaces
 {
-    public interface ICategorieRepository : IGenericRepository<Category>
+    public interface IEntrepriseRepository : IGenericRepository<Entreprise>
     {
         // Signatures des méthodes propres à chaque modèle
-       void Update(Category categorie);
+       void Update(Entreprise entreprise);
     }
 }

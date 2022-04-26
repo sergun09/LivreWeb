@@ -11,7 +11,7 @@ namespace LivreWeb.DataAccess.Repository.Interfaces
         ICategorieRepository CategorieRepository { get; }
         ICouvertureTypeRepository CouvertureTypeRepository { get; }
         ILivreRepository LivreRepository { get; }
-
+        IEntrepriseRepository EntrepriseRepository{ get; }
         Task SaveChanges();
     }
 }

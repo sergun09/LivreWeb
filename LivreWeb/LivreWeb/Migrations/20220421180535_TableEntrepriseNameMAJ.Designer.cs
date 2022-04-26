@@ -4,6 +4,7 @@ using LivreWeb.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LivreWeb.Migrations
 {
     [DbContext(typeof(LivreContext))]
-    partial class LivreContextModelSnapshot : ModelSnapshot
+    [Migration("20220421180535_TableEntrepriseNameMAJ")]
+    partial class TableEntrepriseNameMAJ
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,29 +23,6 @@ namespace LivreWeb.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("LivreWeb.Models.Categorie", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Nom")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("NombreCommandes")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categories");
-                });
 
             modelBuilder.Entity("LivreWeb.Models.CouvertureType", b =>
                 {
@@ -80,7 +59,7 @@ namespace LivreWeb.Migrations
                     b.Property<string>("Departement")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("Nom")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -92,7 +71,7 @@ namespace LivreWeb.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Entreprises");
+                    b.ToTable("Entreprise");
                 });
 
             modelBuilder.Entity("LivreWeb.Models.Livre", b =>
@@ -139,33 +118,6 @@ namespace LivreWeb.Migrations
                     b.HasIndex("CouvertureTypeId");
 
                     b.ToTable("Livres");
-                });
-
-            modelBuilder.Entity("LivreWeb.Models.Panier", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("LivreId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantite")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UtilisateurId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LivreId");
-
-                    b.HasIndex("UtilisateurId");
-
-                    b.ToTable("Panier");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -319,10 +271,12 @@ namespace LivreWeb.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -359,10 +313,12 @@ namespace LivreWeb.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -397,8 +353,8 @@ namespace LivreWeb.Migrations
 
             modelBuilder.Entity("LivreWeb.Models.Livre", b =>
                 {
-                    b.HasOne("LivreWeb.Models.Categorie", "Categorie")
-                        .WithMany("Livres")
+                    b.HasOne("LivreWeb.Models.Entreprise", "Categorie")
+                        .WithMany()
                         .HasForeignKey("CategorieId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -412,25 +368,6 @@ namespace LivreWeb.Migrations
                     b.Navigation("Categorie");
 
                     b.Navigation("CouvertureType");
-                });
-
-            modelBuilder.Entity("LivreWeb.Models.Panier", b =>
-                {
-                    b.HasOne("LivreWeb.Models.Livre", "Livre")
-                        .WithMany("Paniers")
-                        .HasForeignKey("LivreId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LivreWeb.Models.Utilisateur", "Utilisateur")
-                        .WithMany("Paniers")
-                        .HasForeignKey("UtilisateurId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Livre");
-
-                    b.Navigation("Utilisateur");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -484,24 +421,9 @@ namespace LivreWeb.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("LivreWeb.Models.Categorie", b =>
-                {
-                    b.Navigation("Livres");
-                });
-
             modelBuilder.Entity("LivreWeb.Models.CouvertureType", b =>
                 {
                     b.Navigation("Livres");
-                });
-
-            modelBuilder.Entity("LivreWeb.Models.Livre", b =>
-                {
-                    b.Navigation("Paniers");
-                });
-
-            modelBuilder.Entity("LivreWeb.Models.Utilisateur", b =>
-                {
-                    b.Navigation("Paniers");
                 });
 #pragma warning restore 612, 618
         }

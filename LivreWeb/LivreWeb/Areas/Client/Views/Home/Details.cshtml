@@ -1,0 +1,30 @@
+﻿@model Panier
+
+<h1 class="pt-4">Details du livre</h1>
+
+<div class="card">
+  <h5 class="card-header">@Model.Livre.Categorie.Nom | @Model.Livre.CouvertureType.Nom | @Model.Livre.ISBN</h5>
+  <div class="card-body">
+    <h5 class="card-title">@Model.Livre.Titre écrit par <strong>@Model.Livre.Auteur</strong></h5>
+    <div class="clearfix">
+      <img src="@Model.Livre.ImageUrl" class="col-md-6 float-md-end mb-3 ms-md-3">
+      <p>@Model.Livre.Description</p>
+    </div>
+  </div>
+</div>
+
+<form method="post">
+    <div class="row pt-4">
+        <div class="col-12 form-control">
+            <div class="row"></div>
+            <input type="hidden" asp-for="LivreId"/>
+            <label asp-for="Quantite" class="control-label col"></label>
+            <input asp-for="Quantite" class="col-8"/>
+            <input type="submit" class="col btn btn-primary" value="Ajouter au panier"/>
+            <a asp-action="Index" class="btn btn-info">Retour aux Livres</a>
+        </div>
+    </div>
+</form>
+<div>
+    <a asp-action="Upsert" asp-route-id="@Model.Livre.Id" class="btn btn-warning">Mettre à jour</a> |
+</div>

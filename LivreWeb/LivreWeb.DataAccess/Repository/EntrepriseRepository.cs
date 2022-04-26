@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace LivreWeb.DataAccess.Repository
 {
-    public class CategorieRepository : GenericRepository<Category>, ICategorieRepository
+    public class EntrepriseRepository : GenericRepository<Entreprise>, IEntrepriseRepository
     {
         private readonly LivreContext _context;
 
-        public CategorieRepository(LivreContext context) : base(context)
+        public EntrepriseRepository(LivreContext context) : base(context)
         {
             _context = context;
         }
 
-        public void Update(Category categorie)
+        public void Update(Entreprise entreprise)
         {
-            this._dbSet.Update(categorie);
+            this._dbSet.Update(entreprise);
         }
     }
 }

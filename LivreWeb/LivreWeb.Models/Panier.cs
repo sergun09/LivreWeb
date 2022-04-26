@@ -1,15 +1,20 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LivreWeb.Models
 {
-    public class Panier
+    public partial class Panier
     {
-        public Livre Livre { get; set; }
-        public int Quantite { get; set; }
+        public int Id { get; set; }
+        public string Quantite { get; set; } = null!;
+        public string UtilisateurId { get; set; } = null!;
+        public int LivreId { get; set; }
 
+        [ValidateNever]
+        public virtual Livre Livre { get; set; } = null!;
+
+        [ValidateNever]
+        public virtual Utilisateur Utilisateur { get; set; } = null!;
     }
 }

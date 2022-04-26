@@ -8,39 +8,22 @@ using LivreWeb.DataAccess.Repository.Interfaces;
 namespace LivreWeb.Controllers
 {
     [Area("Admin")]
-    public class CategoriesController : Controller
+    public class EntreprisesController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public CategoriesController(IUnitOfWork unitOfWork)
+        public EntreprisesController(IUnitOfWork unitOfWork)
         {
             this._unitOfWork = unitOfWork;
         }
 
-        // GET: Categories
+        // GET: Entreprises
         public async Task<IActionResult> Index()
         {
-            return View(await this._unitOfWork.CategorieRepository.GetAll());
+            return View(await this._unitOfWork.EntrepriseRepository.GetAll());
         }
 
-        // GET: Categories/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var categorie = await this._unitOfWork.CategorieRepository.GetFirstOrDefault(cat => cat.Id == id);
-            if (categorie == null)
-            {
-                return NotFound();
-            }
-
-            return View(categorie);
-        }
-
-        // GET: Categories/Create
+        // GET: Entrpise/Create
         public IActionResult Create()
         {
             return View();
@@ -51,15 +34,15 @@ namespace LivreWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nom,NombreCommandes")] Category categorie)
+        public async Task<IActionResult> Create([Bind("Id,Name,Adresse,Ville,Departement,CodePostal,Numero")] Entreprise entreprise)
         {
             if (ModelState.IsValid)
             {
-                await this._unitOfWork.CategorieRepository.Add(categorie);
+                await this._unitOfWork.EntrepriseRepository.Add(entreprise);
                 await this._unitOfWork.SaveChanges();
                 return RedirectToAction(nameof(Index));
             }
-            return View(categorie);
+            return View(entreprise);
         }
 
         // GET: Categories/Edit/5
@@ -70,12 +53,12 @@ namespace LivreWeb.Controllers
                 return NotFound();
             }
 
-            var categorie = await this._unitOfWork.CategorieRepository.GetFirstOrDefault(cat => cat.Id == id);
-            if (categorie == null)
+            var enteprise = await this._unitOfWork.EntrepriseRepository.GetFirstOrDefault(e => e.Id == id);
+            if (enteprise == null)
             {
                 return NotFound();
             }
-            return View(categorie);
+            return View(enteprise);
         }
 
         // POST: Categories/Edit/5
@@ -83,9 +66,9 @@ namespace LivreWeb.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nom,NombreCommandes")] Category categorie)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nom,NombreCommandes")] Entreprise entreprise)
         {
-            if (id != categorie.Id)
+            if (id != entreprise.Id)
             {
                 return NotFound();
             }
@@ -94,7 +77,7 @@ namespace LivreWeb.Controllers
             {
                 try
                 {
-                    this._unitOfWork.CategorieRepository.Update(categorie);
+                    this._unitOfWork.EntrepriseRepository.Update(entreprise);
                     await _unitOfWork.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -103,7 +86,7 @@ namespace LivreWeb.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(categorie);
+            return View(entreprise);
         }
 
         // GET: Categories/Delete/5
@@ -114,13 +97,13 @@ namespace LivreWeb.Controllers
                 return NotFound();
             }
 
-            var categorie = await this._unitOfWork.CategorieRepository.GetFirstOrDefault(cat => cat.Id == id);
-            if (categorie == null)
+            var entreprise = await this._unitOfWork.EntrepriseRepository.GetFirstOrDefault(cat => cat.Id == id);
+            if (entreprise == null)
             {
                 return NotFound();
             }
 
-            return View(categorie);
+            return View(entreprise);
         }
 
         // POST: Categories/Delete/5
@@ -128,8 +111,8 @@ namespace LivreWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var categorie = await this._unitOfWork.CategorieRepository.GetFirstOrDefault(cat => cat.Id == id);
-            this._unitOfWork.CategorieRepository.DeleteOne(categorie);
+            var entreprise = await this._unitOfWork.EntrepriseRepository.GetFirstOrDefault(cat => cat.Id == id);
+            this._unitOfWork.EntrepriseRepository.DeleteOne(entreprise);
             await _unitOfWork.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
